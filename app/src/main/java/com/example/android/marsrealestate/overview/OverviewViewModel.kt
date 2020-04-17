@@ -39,13 +39,13 @@ class OverviewViewModel : ViewModel() {
     val status: LiveData<String>
         get() = _status
 
-    // TODO (02) Update the ViewModel to return a LiveData of List<MarsProperty>
+
     // Internally, we use a MutableLiveData, because we will be updating the MarsProperty with
     // new values
-    private val _property = MutableLiveData<MarsProperty>()
+    private val _property = MutableLiveData<List<MarsProperty>>()
 
     // The external LiveData interface to the property is immutable, so only this class can modify
-    val property: LiveData<MarsProperty>
+    val property: LiveData<List<MarsProperty>>
         get() = _property
 
     // Create a Coroutine scope using a job to be able to cancel when needed
@@ -75,7 +75,7 @@ class OverviewViewModel : ViewModel() {
                 val listResult = getPropertiesDeferred.await()
                 _status.value = "Success: ${listResult.size} Mars properties retrieved"
                 if (listResult.size > 0) {
-                    _property.value = listResult[0]
+                    _property.value = listResult
                 }
             } catch (e: Exception) {
                 _status.value = "Failure: ${e.message}"
